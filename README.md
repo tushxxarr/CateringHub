@@ -5,18 +5,18 @@ A web-based Catering Marketplace that connects catering businesses with customer
 ## Application Overview
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/Login.png" style="width: 48%; height: auto;">
-  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/MerchantRegister.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Login.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantRegister.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/Homepage.png" style="width: 48%; height: auto;">
-  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/MerchantDashboard.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Homepage.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantDashboard.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/DashboardFoodItems.png" style="width: 48%; height: auto;">
-  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/AddFoodItem.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/DashboardFoodItems.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/AddFoodItem.png" style="width: 48%; height: auto;">
 </div>
 
 ## Features
