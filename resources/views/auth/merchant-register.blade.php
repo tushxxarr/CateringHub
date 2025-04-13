@@ -24,87 +24,82 @@
 
                 <form method="POST" action="{{ route('register.merchant.submit') }}" enctype="multipart/form-data">
                     @csrf
-
-                    {{-- Company Name (juga dipakai untuk user.name) --}}
-                    <div class="mb-3">
-                        <label for="company_name" class="form-label">Business Name</label>
-                        <input id="company_name" type="text" class="form-control @error('company_name') is-invalid @enderror"
-                            name="company_name" value="{{ old('company_name') }}" required>
-                        @error('company_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Email --}}
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" required>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Password --}}
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" required>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Confirm Password --}}
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirm Password</label>
-                        <input id="password_confirmation" type="password" class="form-control"
-                            name="password_confirmation" required>
-                    </div>
-
-                    {{-- Phone --}}
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone Number</label>
-                        <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
-                            name="phone" value="{{ old('phone') }}" required>
-                        @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Address --}}
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Business Address</label>
-                        <textarea id="address" class="form-control @error('address') is-invalid @enderror"
-                            name="address" rows="2" required>{{ old('address') }}</textarea>
-                        @error('address')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Description --}}
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Business Description</label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror"
-                            name="description" rows="3">{{ old('description') }}</textarea>
-                        @error('description')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Logo --}}
-                    <div class="mb-3">
-                        <label for="logo" class="form-label">Business Logo</label>
-                        <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror"
-                            name="logo">
-                        @error('logo')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Submit --}}
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Register</button>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                            @error('name')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="email">Email Address</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
+                            @error('email')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
+                            @error('password')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="password-confirm">Confirm Password</label>
+                            <input type="password" class="form-control" id="password-confirm" name="password_confirmation" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="company_name">Business Name</label>
+                            <input type="text" class="form-control @error('company_name') is-invalid @enderror" id="company_name" name="company_name" value="{{ old('company_name') }}" required>
+                            @error('company_name')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}" required>
+                            @error('phone')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="address">Business Address</label>
+                            <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="4" required>{{ old('address') }}</textarea>
+                            @error('address')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="description">Business Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4">{{ old('description') }}</textarea>
+                            @error('description')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <!-- Baris 6: Logo - Full Width -->
+                        <div class="col-md-12 mb-3">
+                            <label for="logo">Business Logo</label>
+                            <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo">
+                            @error('logo')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        
+                        <!-- Tombol Submit -->
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
                     </div>
                 </form>
 

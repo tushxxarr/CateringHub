@@ -5,18 +5,18 @@ A web-based Catering Marketplace that connects catering businesses with customer
 ## Application Overview
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="screenshots/homepage.png" style="width: 48%; height: auto;" alt="CateringHub Homepage">
-  <img src="screenshots/food-listings.png" style="width: 48%; height: auto;" alt="Food Listings">
+  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/Login.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/MerchantRegister.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="screenshots/merchant-dashboard.png" style="width: 48%; height: auto;" alt="Merchant Dashboard">
-  <img src="screenshots/order-process.png" style="width: 48%; height: auto;" alt="Order Process">
+  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/Homepage.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/MerchantDashboard.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="screenshots/admin-panel.png" style="width: 48%; height: auto;" alt="Admin Panel">
-  <img src="screenshots/customer-orders.png" style="width: 48%; height: auto;" alt="Customer Orders">
+  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/DashboardFoodItems.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/blog-sphere/blob/main/.ApplicationOverview/AddFoodItem.png" style="width: 48%; height: auto;">
 </div>
 
 ## Features
