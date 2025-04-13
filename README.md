@@ -1,10 +1,9 @@
 # CateringHub
 
-A comprehensive platform that connects catering businesses with customers, streamlining the process of ordering food for events, gatherings, and corporate functions. CateringHub enables merchants to showcase their food offerings while allowing customers to browse, order, and manage their catering needs effortlessly.
+A web-based Catering Marketplace that connects catering businesses with customers to simplify food ordering for events, corporate functions, and personal gatherings. CateringHub enables merchants to showcase their menu, manage orders, and generate invoices while allowing customers to effortlessly browse and book catering services.
 
 ## Application Overview
 
-<!-- Replace these placeholder images with actual screenshots of your application once available -->
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="screenshots/homepage.png" style="width: 48%; height: auto;" alt="CateringHub Homepage">
   <img src="screenshots/food-listings.png" style="width: 48%; height: auto;" alt="Food Listings">
@@ -29,7 +28,6 @@ A comprehensive platform that connects catering businesses with customers, strea
 - Comprehensive food item listings with images, descriptions, and pricing
 - Order management system with status tracking
 - Invoice generation and payment tracking
-- Responsive design for desktop and mobile access
 - Dashboard interfaces customized for each user role
 - Search and filter functionality for food items and merchants
 - Order history and tracking for customers
@@ -94,18 +92,14 @@ php artisan storage:link
 npm install
 ```
 
-10. **Build frontend assets:**
-```bash
-npm run dev
-```
-
 ## Additional Setup
 
-- Configure mail settings in `.env` file for order notifications and invoices
-- Set up queue workers for background processing if needed:
-```bash
-php artisan queue:work
-```
+Since the `/vendor` directory is not included in version control (as specified in `.gitignore`), make sure to:
+
+1. Run `composer update` after cloning to install all required dependencies
+2. If you encounter any issues with dependencies, try:
+   - Clearing composer cache: `composer clear-cache`
+   - Removing `composer.lock` and running `composer install` again
 
 ## Usage
 
@@ -157,13 +151,10 @@ The database structure includes the following key tables:
   - Check directory permissions for storage/app/public
   - Verify symbolic link creation with `php artisan storage:link`
 
-- **Order processing errors**:
-  - Check logs at storage/logs/laravel.log
-  - Verify database connections and constraints
-
-- **User registration issues**:
-  - Ensure mail configuration is correct for verification emails
-  - Check validation rules in registration controllers
+- **Database connection errors**:
+  - Verify credentials in `.env` file
+  - Check if MySQL server is running
+  - Ensure database exists before migration
 
 ## Contributing
 
@@ -173,11 +164,6 @@ The database structure includes the following key tables:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Contact
 
 Muhammad Ali Yusuf - muhammadaliyusuff22@gmail.com
-Project Link: [https://github.com/yourusername/catering-hub](https://github.com/yourusername/catering-hub)
