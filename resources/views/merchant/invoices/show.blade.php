@@ -20,17 +20,21 @@
         <div class="row mb-4">
             <div class="col-md-6">
                 <h5 class="mb-3">Merchant</h5>
-                <p class="mb-1"><strong>{{ auth()->user()->name }}</strong></p>
-                <p class="mb-1">{{ auth()->user()->merchant->business_address ?? 'N/A' }}</p>
-                <p class="mb-1">Phone: {{ auth()->user()->phone ?? 'N/A' }}</p>
+                <p class="mb-1"><strong>{{ auth()->user()->merchantProfile->company_name }}</strong></p>
+                <p class="mb-1">{{ auth()->user()->merchantProfile->address ?? 'N/A' }}</p>
+                <p class="mb-1">Phone: {{ auth()->user()->merchantProfile->phone ?? 'N/A' }}</p>
                 <p class="mb-1">Email: {{ auth()->user()->email }}</p>
             </div>
             <div class="col-md-6 text-md-end">
                 <h5 class="mb-3">Customer</h5>
-                <p class="mb-1"><strong>{{ $invoice->order->customer->name ?? 'N/A' }}</strong></p>
-                <p class="mb-1">{{ $invoice->order->customer->address ?? 'N/A' }}</p>
-                <p class="mb-1">Phone: {{ $invoice->order->customer->phone ?? 'N/A' }}</p>
-                <p class="mb-1">Email: {{ $invoice->order->customer->email ?? 'N/A' }}</p>
+                @php
+                    $customerUser = $invoice->order->customer->user ?? null;
+                    $customerProfile = $invoice->order->customer ?? null;
+                @endphp
+                <p class="mb-1"><strong>{{ $customerUser->name ?? 'N/A' }}</strong></p>
+                <p class="mb-1">{{ $customerProfile->address ?? 'N/A' }}</p>
+                <p class="mb-1">Phone: {{ $customerProfile->phone ?? 'N/A' }}</p>
+                <p class="mb-1">Email: {{ $customerUser->email ?? 'N/A' }}</p>
             </div>
         </div>
 

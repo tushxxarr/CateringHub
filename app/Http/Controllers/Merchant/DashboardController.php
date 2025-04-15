@@ -40,9 +40,9 @@ class DashboardController extends Controller
             ->get();
 
         // Total revenue dari invoice yang sudah dibayar
-        $totalRevenue = Invoice::where('merchant_id', $merchant->id)
-            ->where('status', 'paid')
-            ->sum('amount'); // perbaikan di sini
+        $totalRevenue = Order::where('merchant_id', $merchant->id)
+            ->where('status', 'completed')
+            ->sum('total_amount');
 
         // Jumlah invoice yang belum dibayar
         $unpaidInvoicesCount = Invoice::where('merchant_id', $merchant->id)

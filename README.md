@@ -4,14 +4,25 @@ A web-based Catering Marketplace that connects catering businesses with customer
 
 ## Application Overview
 
+### Guest Page
+
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Homepage.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Login.png" style="width: 48%; height: auto;">
-  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantRegister.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Homepage.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantRegister.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerRegister.png" style="width: 48%; height: auto;">
+</div>
+<br>
+
+### Merchant Page
+
+<br>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantDashboard.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerhantProfile.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
@@ -20,28 +31,42 @@ A web-based Catering Marketplace that connects catering businesses with customer
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerRegister.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerhantOrderManage.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerhantInvoiceHistory.png" style="width: 48%; height: auto;">
+</div>
+<br>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantOrderDetail.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantInvoiceDetail.png" style="width: 48%; height: auto;">
+</div>
+<br>
+
+### Customer Page
+
+<br>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerDashboard.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerProfile.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantList.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantMenu.png" style="width: 48%; height: auto;">
 </div>
+<br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Cart.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Order.png" style="width: 48%; height: auto;">
 </div>
+<br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/OrderDetail.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Invoice.png" style="width: 48%; height: auto;">
 </div>
+<br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/OrderHistory.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/InvoiceHistory.png" style="width: 48%; height: auto;">
-</div>
-<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerProfile.png" style="width: 48%; height: auto;">
 </div>
 
 ## Features

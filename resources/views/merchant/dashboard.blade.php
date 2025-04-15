@@ -50,8 +50,8 @@
     <div class="col-md-3 mb-4">
         <div class="card border-info">
             <div class="card-body text-center">
-                <h1 class="display-4">Rp {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</h1>
-                <p class="card-text">Total Revenue</p>
+                <h1 class="display-5">Rp {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</h1>
+                <p class="card-text mt-3">Total Revenue</p>
             </div>
             <div class="card-footer bg-transparent border-info">
                 <a href="{{ route('merchant.invoices.index') }}" class="btn btn-sm btn-info w-100">View Details</a>

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
 use App\Models\MerchantProfile;
+use App\Models\FoodItem;
+use App\Models\Order;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +16,32 @@ class ProfileController extends Controller
     public function show()
     {
         $profile = Auth::user()->merchantProfile;
-        return view('merchant.profile.show', compact('profile'));
+
+        // Get food items count
+        $foodItemsCount = FoodItem::where('merchant_id', $profile->id)->count();
+
+        // Get total orders
+        $totalOrders = Order::where('merchant_id', $profile->id)->count();
+
+        // Get total revenue
+        $totalRevenue = Order::where('merchant_id', $profile->id)
+            ->where('status', 'completed')
+            ->sum('total_amount');
+
+        // Get recent orders
+        $recentOrders = Order::where('merchant_id', $profile->id)
+            ->with(['customer.user'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('merchant.profile.show', compact(
+            'profile',
+            'foodItemsCount',
+            'totalOrders',
+            'totalRevenue',
+            'recentOrders'
+        ));
     }
 
     public function edit()
