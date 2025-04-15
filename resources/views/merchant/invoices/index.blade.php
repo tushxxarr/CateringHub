@@ -41,12 +41,12 @@
                 <tbody>
                     @forelse($invoices ?? [] as $invoice)
                     <tr>
-                        <td>#{{ $invoice->id }}</td>
-                        <td>{{ $invoice->order->customer->name }}</td>
+                        <td>#{{ $invoice->invoice_number ?? $invoice->id }}</td>
+                        <td>{{ $invoice->order->customer->name ?? 'N/A' }}</td>
                         <td>#{{ $invoice->order_id }}</td>
                         <td>Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
-                        <td>{{ $invoice->issue_date->format('d M Y') }}</td>
-                        <td>{{ $invoice->due_date->format('d M Y') }}</td>
+                        <td>{{ isset($invoice->created_at) ? $invoice->created_at->format('d M Y') : 'N/A' }}</td>
+                        <td>{{ isset($invoice->due_date) && $invoice->due_date ? date('d M Y', strtotime($invoice->due_date)) : 'N/A' }}</td>
                         <td>
                             @if($invoice->status == 'pending')
                                 <span class="badge bg-warning">Pending</span>
@@ -54,6 +54,8 @@
                                 <span class="badge bg-success">Paid</span>
                             @elseif($invoice->status == 'overdue')
                                 <span class="badge bg-danger">Overdue</span>
+                            @elseif($invoice->status == 'cancelled')
+                                <span class="badge bg-danger">Cancelled</span>
                             @endif
                         </td>
                         <td>

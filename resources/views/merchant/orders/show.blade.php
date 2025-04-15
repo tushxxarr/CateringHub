@@ -27,9 +27,9 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <p><strong>Order ID:</strong> #{{ $order->id }}</p>
-                        <p><strong>Order Date:</strong> {{ $order->created_at->format('M d, Y H:i') }}</p>
-                        <p><strong>Customer:</strong> {{ $order->customer->name }}</p>
-                        <p><strong>Phone:</strong> {{ $order->customer->phone }}</p>
+                        <p><strong>Order Date:</strong> {{ $order->created_at instanceof \DateTime ? $order->created_at->format('M d, Y H:i') : date('M d, Y H:i', strtotime($order->created_at)) }}</p>
+                        <p><strong>Customer:</strong> {{ $order->customer->user->name ?? $order->customer->name ?? 'N/A' }}</p>
+                        <p><strong>Phone:</strong> {{ $order->customer->phone ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Status:</strong> 
@@ -43,10 +43,10 @@
                                 <span class="badge bg-danger">Cancelled</span>
                             @endif
                         </p>
-                        <p><strong>Delivery Date:</strong> {{ $order->delivery_date->format('M d, Y') }}</p>
+                        <p><strong>Delivery Date:</strong> {{ is_object($order->delivery_date) ? $order->delivery_date->format('M d, Y') : date('M d, Y', strtotime($order->delivery_date)) }}</p>
                         <p><strong>Delivery Time:</strong> {{ $order->delivery_time }}</p>
                         <p><strong>Payment Status:</strong>
-                            @if($order->is_paid)
+                            @if(isset($order->is_paid) && $order->is_paid)
                                 <span class="badge bg-success">Paid</span>
                             @else
                                 <span class="badge bg-danger">Unpaid</span>
@@ -87,7 +87,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        @if($item->foodItem->image)
+                                        @if(isset($item->foodItem->image) && $item->foodItem->image)
                                             <img src="{{ asset('storage/' . $item->foodItem->image) }}" alt="{{ $item->foodItem->name }}" class="img-thumbnail me-2" style="width: 50px; height: 50px; object-fit: cover;">
                                         @else
                                             <div class="bg-light me-2" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
@@ -95,8 +95,8 @@
                                             </div>
                                         @endif
                                         <div>
-                                            <h6 class="mb-0">{{ $item->foodItem->name }}</h6>
-                                            <small class="text-muted">{{ Str::limit($item->foodItem->description, 50) }}</small>
+                                            <h6 class="mb-0">{{ $item->foodItem->name ?? 'Unknown Item' }}</h6>
+                                            <small class="text-muted">{{ isset($item->foodItem->description) ? Str::limit($item->foodItem->description, 50) : '' }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -111,13 +111,13 @@
                                 <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
                                 <td class="text-end">Rp {{ number_format($order->subtotal, 0, ',', '.') }}</td>
                             </tr>
-                            @if($order->tax > 0)
+                            @if(isset($order->tax) && $order->tax > 0)
                             <tr>
-                                <td colspan="3" class="text-end"><strong>Tax ({{ $order->tax_percentage }}%):</strong></td>
+                                <td colspan="3" class="text-end"><strong>Tax ({{ $order->tax_percentage ?? '0' }}%):</strong></td>
                                 <td class="text-end">Rp {{ number_format($order->tax, 0, ',', '.') }}</td>
                             </tr>
                             @endif
-                            @if($order->delivery_fee > 0)
+                            @if(isset($order->delivery_fee) && $order->delivery_fee > 0)
                             <tr>
                                 <td colspan="3" class="text-end"><strong>Delivery Fee:</strong></td>
                                 <td class="text-end">Rp {{ number_format($order->delivery_fee, 0, ',', '.') }}</td>
@@ -176,12 +176,18 @@
                 <h5 class="mb-0">Customer Information</h5>
             </div>
             <div class="card-body">
-                <p><strong>Name:</strong> {{ $order->customer->name }}</p>
-                <p><strong>Email:</strong> {{ $order->customer->email }}</p>
-                <p><strong>Phone:</strong> {{ $order->customer->phone }}</p>
-                <p><strong>Address:</strong> {{ $order->customer->address }}</p>
+                <p><strong>Name:</strong> {{ $order->customer->user->name ?? $order->customer->name ?? 'N/A' }}</p>
+                <p><strong>Email:</strong> {{ $order->customer->email ?? $order->customer->user->email ?? 'N/A' }}</p>
+                <p><strong>Phone:</strong> {{ $order->customer->phone ?? 'N/A' }}</p>
+                <p><strong>Address:</strong> {{ $order->customer->address ?? 'N/A' }}</p>
                 <hr>
-                <p><strong>Customer Since:</strong> {{ $order->customer->created_at->format('M d, Y') }}</p>
+                <p><strong>Customer Since:</strong> {{ 
+                    isset($order->customer->created_at) ? 
+                    ($order->customer->created_at instanceof \DateTime ? 
+                        $order->customer->created_at->format('M d, Y') : 
+                        date('M d, Y', strtotime($order->customer->created_at))) 
+                    : 'N/A' 
+                }}</p>
                 <p><strong>Total Orders:</strong> {{ $customerOrderCount ?? 0 }}</p>
             </div>
         </div>

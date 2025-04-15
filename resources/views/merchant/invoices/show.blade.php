@@ -21,16 +21,16 @@
             <div class="col-md-6">
                 <h5 class="mb-3">Merchant</h5>
                 <p class="mb-1"><strong>{{ auth()->user()->name }}</strong></p>
-                <p class="mb-1">{{ auth()->user()->merchant->business_address }}</p>
-                <p class="mb-1">Phone: {{ auth()->user()->phone }}</p>
+                <p class="mb-1">{{ auth()->user()->merchant->business_address ?? 'N/A' }}</p>
+                <p class="mb-1">Phone: {{ auth()->user()->phone ?? 'N/A' }}</p>
                 <p class="mb-1">Email: {{ auth()->user()->email }}</p>
             </div>
             <div class="col-md-6 text-md-end">
                 <h5 class="mb-3">Customer</h5>
-                <p class="mb-1"><strong>{{ $invoice->order->customer->name }}</strong></p>
-                <p class="mb-1">{{ $invoice->order->customer->address }}</p>
-                <p class="mb-1">Phone: {{ $invoice->order->customer->phone }}</p>
-                <p class="mb-1">Email: {{ $invoice->order->customer->email }}</p>
+                <p class="mb-1"><strong>{{ $invoice->order->customer->name ?? 'N/A' }}</strong></p>
+                <p class="mb-1">{{ $invoice->order->customer->address ?? 'N/A' }}</p>
+                <p class="mb-1">Phone: {{ $invoice->order->customer->phone ?? 'N/A' }}</p>
+                <p class="mb-1">Email: {{ $invoice->order->customer->email ?? 'N/A' }}</p>
             </div>
         </div>
 
@@ -39,8 +39,8 @@
                 <h5 class="mb-3">Invoice Details</h5>
                 <p class="mb-1"><strong>Invoice Number:</strong> #{{ $invoice->id }}</p>
                 <p class="mb-1"><strong>Order Number:</strong> #{{ $invoice->order_id }}</p>
-                <p class="mb-1"><strong>Issue Date:</strong> {{ $invoice->issue_date->format('d M Y') }}</p>
-                <p class="mb-1"><strong>Due Date:</strong> {{ $invoice->due_date->format('d M Y') }}</p>
+                <p class="mb-1"><strong>Issue Date:</strong> {{ $invoice->issue_date ? \Carbon\Carbon::parse($invoice->issue_date)->format('d M Y') : 'N/A' }}</p>
+                <p class="mb-1"><strong>Due Date:</strong> {{ $invoice->due_date ? \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') : 'N/A' }}</p>
             </div>
             <div class="col-md-6 text-md-end">
                 <h5 class="mb-3">Payment Status</h5>
@@ -48,7 +48,9 @@
                     <span class="badge bg-warning p-2 fs-6">Pending</span>
                 @elseif($invoice->status == 'paid')
                     <span class="badge bg-success p-2 fs-6">Paid</span>
-                    <p class="mt-2"><strong>Payment Date:</strong> {{ $invoice->payment_date->format('d M Y') }}</p>
+                    @if($invoice->payment_date)
+                        <p class="mt-2"><strong>Payment Date:</strong> {{ \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') }}</p>
+                    @endif
                 @elseif($invoice->status == 'overdue')
                     <span class="badge bg-danger p-2 fs-6">Overdue</span>
                 @endif
@@ -69,7 +71,7 @@
                 <tbody>
                     @foreach($invoice->order->orderItems as $item)
                     <tr>
-                        <td>{{ $item->food_item->name }}</td>
+                        <td>{{ $item->food_item->name ?? 'N/A' }}</td>
                         <td>{{ $item->quantity }}</td>
                         <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
@@ -79,11 +81,11 @@
                 <tfoot>
                     <tr>
                         <th colspan="3" class="text-end">Subtotal</th>
-                        <td>Rp {{ number_format($invoice->order->subtotal, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($invoice->order->subtotal ?? 0, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <th colspan="3" class="text-end">Tax ({{ $invoice->order->tax_percentage }}%)</th>
-                        <td>Rp {{ number_format($invoice->order->tax_amount, 0, ',', '.') }}</td>
+                        <th colspan="3" class="text-end">Tax ({{ $invoice->order->tax_percentage ?? 0 }}%)</th>
+                        <td>Rp {{ number_format($invoice->order->tax_amount ?? 0, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <th colspan="3" class="text-end">Total</th>

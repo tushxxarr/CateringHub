@@ -28,6 +28,19 @@ class InvoiceController extends Controller
         $this->authorize('view', $invoice);
         $invoice->load('order.customer', 'order.merchant', 'order.orderItems.foodItem');
 
+        // Convert string dates to Carbon instances if they're not already
+        if (!is_object($invoice->issue_date)) {
+            $invoice->issue_date = \Carbon\Carbon::parse($invoice->issue_date);
+        }
+
+        if (!is_object($invoice->due_date)) {
+            $invoice->due_date = \Carbon\Carbon::parse($invoice->due_date);
+        }
+
+        if ($invoice->payment_date && !is_object($invoice->payment_date)) {
+            $invoice->payment_date = \Carbon\Carbon::parse($invoice->payment_date);
+        }
+
         return view('merchant.invoices.show', compact('invoice'));
     }
 
