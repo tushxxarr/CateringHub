@@ -44,7 +44,7 @@ A web-based Catering Marketplace that connects catering businesses with customer
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerDashboard.png" style="width: 48%; height: auto;">
-  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerProfile.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerProfilenew.png" style="width: 48%; height: auto;">
 </div>
 <br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
