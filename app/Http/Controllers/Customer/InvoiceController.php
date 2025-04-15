@@ -12,6 +12,8 @@ class InvoiceController extends Controller
     public function index()
     {
         $customer = Auth::user()->customerProfile;
+
+        // Get all invoices
         $invoices = Invoice::whereHas('order', function ($query) use ($customer) {
             $query->where('customer_id', $customer->id);
         })
@@ -19,7 +21,39 @@ class InvoiceController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('customer.invoices.index', compact('invoices'));
+        // Get pending invoices
+        $pendingInvoices = Invoice::whereHas('order', function ($query) use ($customer) {
+            $query->where('customer_id', $customer->id);
+        })
+            ->where('status', 'pending')
+            ->with('order.merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Get paid invoices
+        $paidInvoices = Invoice::whereHas('order', function ($query) use ($customer) {
+            $query->where('customer_id', $customer->id);
+        })
+            ->where('status', 'paid')
+            ->with('order.merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Get cancelled invoices
+        $cancelledInvoices = Invoice::whereHas('order', function ($query) use ($customer) {
+            $query->where('customer_id', $customer->id);
+        })
+            ->where('status', 'cancelled')
+            ->with('order.merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('customer.invoices.index', compact(
+            'invoices',
+            'pendingInvoices',
+            'paidInvoices',
+            'cancelledInvoices'
+        ));
     }
 
     public function show(Invoice $invoice)

@@ -31,7 +31,6 @@ class CartController extends Controller
                         'quantity' => $item['quantity'],
                         'subtotal' => $subtotal,
                         'merchant_id' => $foodItem->merchant_id,
-                        'delivery_date' => $item['delivery_date'] ?? null,
                     ];
                 }
             }
@@ -45,12 +44,10 @@ class CartController extends Controller
         $request->validate([
             'food_item_id' => 'required|exists:food_items,id',
             'quantity' => 'required|integer|min:1',
-            'delivery_date' => 'required|date|after_or_equal:today',
         ]);
 
         $foodItemId = $request->food_item_id;
         $quantity = $request->quantity;
-        $deliveryDate = $request->delivery_date;
 
         $foodItem = FoodItem::findOrFail($foodItemId);
 
@@ -68,15 +65,23 @@ class CartController extends Controller
 
         if (isset($cart[$foodItemId])) {
             $cart[$foodItemId]['quantity'] += $quantity;
-            $cart[$foodItemId]['delivery_date'] = $deliveryDate;
         } else {
             $cart[$foodItemId] = [
                 'quantity' => $quantity,
-                'delivery_date' => $deliveryDate,
             ];
         }
 
         Session::put('cart', $cart);
+
+        // Hitung jumlah jenis item, bukan total quantity
+        $cartCount = count($cart);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => 'Item added to cart successfully.',
+                'cartCount' => $cartCount
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Item added to cart successfully.');
     }

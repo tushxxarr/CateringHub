@@ -3,39 +3,42 @@
 @section('title', 'Shopping Cart')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-12">
-        <h2>Shopping Cart</h2>
-        <p class="text-muted">Review your items before checkout</p>
-    </div>
-</div>
+<div class="container py-4">
+    <h1 class="mb-4">Shopping Cart</h1>
 
-@if(count($cartItems) > 0)
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Cart Items ({{ count($cartItems) }})</h5>
+    @if(count($cartItems) > 0)
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Items in Cart</h5>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('customer.merchants.index') }}" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-plus me-1"></i> Add Item
+                        </a>
                         <form action="{{ route('customer.cart.clear') }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to clear your cart?')">
-                                <i class="fas fa-trash"></i> Clear Cart
+                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to clear your cart?')">
+                                <i class="fas fa-trash-alt me-1"></i> Clear Cart
                             </button>
                         </form>
                     </div>
                 </div>
-                <div class="card-body p-0">
+            </div>
+            <div class="card-body">
+                <form action="{{ route('customer.cart.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-light">
+                        <table class="table">
+                            <thead>
                                 <tr>
                                     <th>Item</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Subtotal</th>
-                                    <th>Action</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,164 +46,120 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($item['image'])
-                                                <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                            @if($item['food_item']->image)
+                                                <img src="{{ asset('storage/' . $item['food_item']->image) }}" alt="{{ $item['food_item']->name }}" class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                             @else
-                                                <img src="{{ asset('images/default-food.jpg') }}" alt="{{ $item['name'] }}" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                                <div class="bg-light me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-utensils text-muted"></i>
+                                                </div>
                                             @endif
                                             <div>
-                                                <h6 class="mb-0">{{ $item['name'] }}</h6>
-                                                <small class="text-muted">{{ $item['merchant_name'] }}</small>
+                                                <h6 class="mb-0">{{ $item['food_item']->name }}</h6>
+                                                <small class="text-muted">{{ Str::limit($item['food_item']->description, 50) }}</small>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
-                                    <td>
-                                        <form action="{{ route('customer.cart.update') }}" method="POST" class="quantity-form">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" name="item_id" value="{{ $item['id'] }}">
-                                            <div class="input-group input-group-sm" style="width: 120px;">
-                                                <button type="button" class="btn btn-outline-secondary qty-decrease">-</button>
-                                                <input type="number" name="quantity" class="form-control text-center quantity-input" value="{{ $item['quantity'] }}" min="1" max="100">
-                                                <button type="button" class="btn btn-outline-secondary qty-increase">+</button>
-                                            </div>
-                                        </form>
+                                    <td>{{ number_format($item['food_item']->price, 2) }}</td>
+                                    <td style="width: 150px;">
+                                        <div class="input-group input-group-sm">
+                                            <button type="button" class="btn btn-outline-secondary qty-decrease" data-id="{{ $item['id'] }}">-</button>
+                                            <input type="number" name="items[{{ $loop->index }}][quantity]" class="form-control text-center quantity-input" value="{{ $item['quantity'] }}" min="1" max="100">
+                                            <input type="hidden" name="items[{{ $loop->index }}][id]" value="{{ $item['id'] }}">
+                                            <button type="button" class="btn btn-outline-secondary qty-increase" data-id="{{ $item['id'] }}">+</button>
+                                        </div>
                                     </td>
-                                    <td>Rp {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}</td>
+                                    <td>{{ number_format($item['subtotal'], 2) }}</td>
                                     <td>
-                                        <form action="{{ route('customer.cart.remove', $item['id']) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('customer.cart.remove', $item['id']) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-times"></i> Remove
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-times"></i>
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr class="fw-bold">
+                                    <td colspan="3" class="text-end">Total:</td>
+                                    <td>{{ number_format($total, 2) }}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{{ route('customer.orders.create') }}" class="btn btn-primary">
+                                                <i class="fas fa-check me-1"></i> Checkout
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Order Summary</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span>Rp {{ number_format($totalAmount, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Delivery Fee:</span>
-                        <span>Rp {{ number_format($deliveryFee, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tax ({{ $taxRate }}%):</span>
-                        <span>Rp {{ number_format($taxAmount, 0, ',', '.') }}</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-3">
-                        <strong>Total:</strong>
-                        <strong>Rp {{ number_format($grandTotal, 0, ',', '.') }}</strong>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('customer.orders.create') }}" class="btn btn-success">
-                            <i class="fas fa-shopping-cart me-2"></i> Proceed to Checkout
-                        </a>
-                        <a href="{{ route('customer.merchants.index') }}" class="btn btn-outline-primary">
-                            <i class="fas fa-arrow-left me-2"></i> Continue Shopping
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            @if(!empty($recommendedItems))
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">You Might Also Like</h5>
-                </div>
-                <div class="card-body p-2">
-                    @foreach($recommendedItems as $item)
-                    <div class="d-flex align-items-center p-2 border-bottom">
-                        @if($item->image)
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                        @else
-                            <img src="{{ asset('images/default-food.jpg') }}" alt="{{ $item->name }}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                        @endif
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0">{{ $item->name }}</h6>
-                            <small class="text-muted">Rp {{ number_format($item->price, 0, ',', '.') }}</small>
-                        </div>
-                        <form action="{{ route('customer.cart.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="food_item_id" value="{{ $item->id }}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                <i class="fas fa-plus"></i> Add
-                            </button>
-                        </form>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-        </div>
-    </div>
-@else
-    <div class="row">
-        <div class="col-12 text-center my-5">
-            <div class="alert alert-info">
-                <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+    @else
+        <div class="card shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
                 <h4>Your cart is empty</h4>
-                <p>Looks like you haven't added any items to your cart yet.</p>
-                <a href="{{ route('customer.merchants.index') }}" class="btn btn-primary">Start Shopping</a>
+                <p class="text-muted">Start shopping now to add items to your cart!</p>
+                <a href="{{ route('customer.merchants.index') }}" class="btn btn-primary">
+                    <i class="fas fa-store me-1"></i> Browse Merchants
+                </a>
             </div>
         </div>
-    </div>
-@endif
-@endsection
+    @endif
+</div>
 
-@section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Quantity buttons functionality
-        document.querySelectorAll('.qty-decrease').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                const input = this.nextElementSibling;
-                let value = parseInt(input.value);
-                if (value > 1) {
-                    input.value = value - 1;
-                    submitForm(this.closest('form'));
-                }
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Quantity increase/decrease buttons
+    document.querySelectorAll('.qty-decrease').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.nextElementSibling;
+            const value = parseInt(input.value);
+            if (value > 1) {
+                input.value = value - 1;
+                updateSubtotal(input);
+            }
         });
-
-        document.querySelectorAll('.qty-increase').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                const input = this.previousElementSibling;
-                let value = parseInt(input.value);
-                if (value < 100) {
-                    input.value = value + 1;
-                    submitForm(this.closest('form'));
-                }
-            });
-        });
-
-        document.querySelectorAll('.quantity-input').forEach(function(input) {
-            input.addEventListener('change', function() {
-                submitForm(this.closest('form'));
-            });
-        });
-
-        function submitForm(form) {
-            form.submit();
-        }
     });
+    
+    document.querySelectorAll('.qty-increase').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.previousElementSibling.previousElementSibling;
+            const value = parseInt(input.value);
+            if (value < 100) {
+                input.value = value + 1;
+                updateSubtotal(input);
+            }
+        });
+    });
+    
+    function updateSubtotal(input) {
+        // This is just for visual feedback - actual calculation happens server-side
+        const row = input.closest('tr');
+        const price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(',', ''));
+        const quantity = parseInt(input.value);
+        const subtotal = price * quantity;
+        row.querySelector('td:nth-child(4)').textContent = subtotal.toFixed(2);
+        
+        // Update total
+        let total = 0;
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            const row = input.closest('tr');
+            const price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(',', ''));
+            const quantity = parseInt(input.value);
+            total += price * quantity;
+        });
+        
+        document.querySelector('tfoot tr.fw-bold td:nth-child(2)').textContent = total.toFixed(2);
+    }
+});
 </script>
 @endsection

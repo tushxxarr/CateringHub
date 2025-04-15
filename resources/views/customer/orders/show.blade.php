@@ -84,22 +84,30 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($item->foodItem->image)
+                                            @if($item->foodItem && $item->foodItem->image)
                                                 <img src="{{ asset('storage/' . $item->foodItem->image) }}" alt="{{ $item->foodItem->name }}" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
                                             @endif
                                             <div>
-                                                <h6 class="mb-0">{{ $item->foodItem->name }}</h6>
-                                                <small class="text-muted">{{ Str::limit($item->foodItem->description, 50) }}</small>
+                                                <h6 class="mb-0">{{ $item->foodItem ? $item->foodItem->name : 'Unknown Item' }}</h6>
+                                                <small class="text-muted">{{ $item->foodItem ? Str::limit($item->foodItem->description, 50) : '' }}</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-center">{{ $item->quantity }}</td>
                                     <td class="text-end">Rp {{ number_format($item->price, 0, ',', '.') }}</td>
-                                    <td class="text-end">Rp {{ number_format($item->quantity * $item->price, 0, ',', '.') }}</td>
+                                    <td class="text-end">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot class="table-group-divider">
+                                <tr>
+                                    <td colspan="3" class="text-end">Subtotal:</td>
+                                    <td class="text-end">Rp {{ number_format($order->subtotal ?? 0, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end">Delivery Fee:</td>
+                                    <td class="text-end">Rp {{ number_format($order->delivery_fee ?? 10000, 0, ',', '.') }}</td>
+                                </tr>
                                 <tr>
                                     <th colspan="3" class="text-end">Total:</th>
                                     <th class="text-end">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</th>

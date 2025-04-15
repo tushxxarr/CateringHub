@@ -46,21 +46,90 @@
     </div>
 </div>
 
-@foreach($categories as $category)
-    @php
-        $categoryItems = $foodItems->where('category_id', $category->id);
-    @endphp
+@php
+    $allFoodItems = collect();
+    foreach($foodItems as $categoryId => $items) {
+        $allFoodItems = $allFoodItems->merge($items);
+    }
+    
+    // Filter items by category if category parameter exists
+    $filteredItems = $allFoodItems;
+    if(request()->has('category')) {
+        $filteredItems = $allFoodItems->where('category_id', request()->get('category'));
+    }
+    
+    // Get uncategorized items (where category_id is null)
+    $uncategorizedItems = $filteredItems->whereNull('category_id');
+@endphp
 
-    @if($categoryItems->count() > 0)
+@if($filteredItems->count() > 0)
+    @foreach($categories as $category)
+        @php
+            $categoryItems = $filteredItems->where('category_id', $category->id);
+        @endphp
+
+        @if($categoryItems->count() > 0)
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4>{{ $category->name }}</h4>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                @foreach($categoryItems as $item)
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            @if($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('images/default-food.jpg') }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                            @endif
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="card-title mb-0">{{ $item->name }}</h5>
+                                    <span class="badge bg-primary">Rp {{ number_format($item->price, 0, ',', '.') }}</span>
+                                </div>
+                                <p class="card-text">{{ Str::limit($item->description, 100) }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                @if($item->is_available)
+                                    <form class="add-to-cart-form" action="{{ route('customer.cart.add') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="food_item_id" value="{{ $item->id }}">
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="input-group input-group-sm" style="width: 120px;">
+                                                <button type="button" class="btn btn-outline-secondary qty-decrease">-</button>
+                                                <input type="number" name="quantity" class="form-control text-center" value="1" min="1" max="100">
+                                                <button type="button" class="btn btn-outline-secondary qty-increase">+</button>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-sm add-to-cart-btn">
+                                                <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                            </button>
+                                        </div>
+                                    </form>
+                                @else
+                                    <p class="text-danger mb-0"><i class="fas fa-times-circle me-1"></i> Currently Unavailable</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    @endforeach
+
+    @if($uncategorizedItems->count() > 0)
         <div class="row mb-4">
             <div class="col-12">
-                <h4>{{ $category->name }}</h4>
+                <h4>Other Items</h4>
                 <hr>
             </div>
         </div>
 
         <div class="row mb-4">
-            @foreach($categoryItems as $item)
+            @foreach($uncategorizedItems as $item)
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         @if($item->image)
@@ -100,59 +169,7 @@
             @endforeach
         </div>
     @endif
-@endforeach
-
-@if($uncategorizedItems->count() > 0)
-    <div class="row mb-4">
-        <div class="col-12">
-            <h4>Other Items</h4>
-            <hr>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        @foreach($uncategorizedItems as $item)
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    @if($item->image)
-                        <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
-                    @else
-                        <img src="{{ asset('images/default-food.jpg') }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
-                    @endif
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="card-title mb-0">{{ $item->name }}</h5>
-                            <span class="badge bg-primary">Rp {{ number_format($item->price, 0, ',', '.') }}</span>
-                        </div>
-                        <p class="card-text">{{ Str::limit($item->description, 100) }}</p>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        @if($item->is_available)
-                            <form action="{{ route('customer.cart.add') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="food_item_id" value="{{ $item->id }}">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="input-group input-group-sm" style="width: 120px;">
-                                        <button type="button" class="btn btn-outline-secondary qty-decrease">-</button>
-                                        <input type="number" name="quantity" class="form-control text-center" value="1" min="1" max="100">
-                                        <button type="button" class="btn btn-outline-secondary qty-increase">+</button>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-cart-plus me-1"></i> Add to Cart
-                                    </button>
-                                </div>
-                            </form>
-                        @else
-                            <p class="text-danger mb-0"><i class="fas fa-times-circle me-1"></i> Currently Unavailable</p>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-@endif
-
-@if($foodItems->count() == 0)
+@else
     <div class="row">
         <div class="col-12 text-center my-5">
             <div class="alert alert-info">
@@ -167,27 +184,35 @@
 
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Quantity increase/decrease buttons
-        document.querySelectorAll('.qty-decrease').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                let input = this.nextElementSibling;
-                let value = parseInt(input.value);
-                if (value > 1) {
-                    input.value = value - 1;
-                }
-            });
-        });
-
-        document.querySelectorAll('.qty-increase').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                let input = this.previousElementSibling;
-                let value = parseInt(input.value);
-                if (value < 100) {
-                    input.value = value + 1;
-                }
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default delivery date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedDate = tomorrow.toISOString().split('T')[0];
+    document.querySelectorAll('input[name="delivery_date"]').forEach(input => {
+        input.value = formattedDate;
+    });
+    
+    // Quantity increase/decrease buttons
+    document.querySelectorAll('.qty-decrease').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.nextElementSibling;
+            const value = parseInt(input.value);
+            if (value > 1) {
+                input.value = value - 1;
+            }
         });
     });
+    
+    document.querySelectorAll('.qty-increase').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const value = parseInt(input.value);
+            if (value < 100) {
+                input.value = value + 1;
+            }
+        });
+    });
+});
 </script>
 @endsection

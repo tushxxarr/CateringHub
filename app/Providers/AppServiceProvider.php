@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Session;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Share cart count with all views
+        View::composer('*', function ($view) {
+            if (auth()->check() && auth()->user()->role === 'customer') {
+                $cart = Session::get('cart', []);
+                $cartCount = count($cart);
+                $view->with('cartCount', $cartCount);
+            }
+        });
     }
 }

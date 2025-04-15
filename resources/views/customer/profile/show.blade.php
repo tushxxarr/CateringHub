@@ -61,7 +61,7 @@
                     <div class="col-md-4 mb-3">
                         <div class="card border-success text-center h-100">
                             <div class="card-body">
-                                <h3 class="mb-0">{{ $orderCount ?? 0 }}</h3>
+                                <h3 class="mb-0">{{ $orderCount }}</h3>
                                 <p class="text-muted">Total Orders</p>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                     <div class="col-md-4 mb-3">
                         <div class="card border-primary text-center h-100">
                             <div class="card-body">
-                                <h3 class="mb-0">{{ $completedOrderCount ?? 0 }}</h3>
+                                <h3 class="mb-0">{{ $completedOrderCount }}</h3>
                                 <p class="text-muted">Completed Orders</p>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                     <div class="col-md-4 mb-3">
                         <div class="card border-warning text-center h-100">
                             <div class="card-body">
-                                <h3 class="mb-0">{{ $pendingOrderCount ?? 0 }}</h3>
+                                <h3 class="mb-0">{{ $pendingOrderCount }}</h3>
                                 <p class="text-muted">Pending Orders</p>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                 <h5 class="mb-0">Recent Activity</h5>
             </div>
             <div class="card-body">
-                @if(!empty($recentActivities))
+                @if(count($recentActivities) > 0)
                 <ul class="list-group list-group-flush">
                     @foreach($recentActivities as $activity)
                     <li class="list-group-item">

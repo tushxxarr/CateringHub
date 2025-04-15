@@ -14,6 +14,7 @@ class CreateOrderItemsTable extends Migration
             $table->foreignId('food_item_id')->references('id')->on('food_items');
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
+            $table->decimal('subtotal', 10, 2); // Added missing subtotal field
             $table->timestamps();
         });
     }

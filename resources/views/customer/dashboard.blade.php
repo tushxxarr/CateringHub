@@ -14,11 +14,11 @@
     <div class="col-md-3 mb-4">
         <div class="card border-primary">
             <div class="card-body text-center">
-                <h1 class="display-4">{{ $pendingOrdersCount ?? 0 }}</h1>
+                <h1 class="display-4">{{ $pendingOrdersCount }}</h1>
                 <p class="card-text">Pending Orders</p>
             </div>
             <div class="card-footer bg-transparent border-primary">
-                <a href="{{ route('customer.orders.index') }}" class="btn btn-sm btn-primary w-100">View Orders</a>
+                <a href="{{ route('customer.orders.index') }}#pending-orders" class="btn btn-sm btn-primary w-100">View Orders</a>
             </div>
         </div>
     </div>
@@ -26,11 +26,11 @@
     <div class="col-md-3 mb-4">
         <div class="card border-success">
             <div class="card-body text-center">
-                <h1 class="display-4">{{ $completedOrdersCount ?? 0 }}</h1>
+                <h1 class="display-4">{{ $completedOrdersCount }}</h1>
                 <p class="card-text">Completed Orders</p>
             </div>
             <div class="card-footer bg-transparent border-success">
-                <a href="{{ route('customer.orders.index') }}" class="btn btn-sm btn-success w-100">View History</a>
+                <a href="{{ route('customer.orders.index') }}#completed-orders" class="btn btn-sm btn-success w-100">View History</a>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
     <div class="col-md-3 mb-4">
         <div class="card border-warning">
             <div class="card-body text-center">
-                <h1 class="display-4">{{ $unpaidInvoicesCount ?? 0 }}</h1>
+                <h1 class="display-4">{{ $unpaidInvoicesCount }}</h1>
                 <p class="card-text">Unpaid Invoices</p>
             </div>
             <div class="card-footer bg-transparent border-warning">
@@ -50,7 +50,7 @@
     <div class="col-md-3 mb-4">
         <div class="card border-info">
             <div class="card-body text-center">
-                <h1 class="display-4">{{ $cartItemsCount ?? 0 }}</h1>
+                <h1 class="display-4">{{ $cartItemsCount }}</h1>
                 <p class="card-text">Items in Cart</p>
             </div>
             <div class="card-footer bg-transparent border-info">
@@ -80,10 +80,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($recentOrders ?? [] as $order)
+                            @forelse($recentOrders as $order)
                             <tr>
                                 <td>#{{ $order->order_number }}</td>
-                                <td>{{ $order->merchant->company_name }}</td>
+                                <td>{{ $order->merchant->business_name ?? $order->merchant->company_name }}</td>
                                 <td>{{ $order->created_at->format('M d, Y') }}</td>
                                 <td>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                                 <td>
@@ -123,11 +123,17 @@
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    @forelse($popularMerchants ?? [] as $merchant)
+                    @forelse($popularMerchants as $merchant)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                            <img src="{{ asset('storage/' . $merchant->logo) }}" alt="{{ $merchant->company_name }}" class="me-2 rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                            {{ $merchant->company_name }}
+                            @if($merchant->logo)
+                                <img src="{{ asset('storage/' . $merchant->logo) }}" alt="{{ $merchant->business_name ?? $merchant->company_name }}" class="me-2 rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                            @else
+                                <div class="me-2 rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                            @endif
+                            {{ $merchant->business_name ?? $merchant->company_name }}
                         </div>
                         <a href="{{ route('customer.merchants.show', $merchant) }}" class="btn btn-sm btn-outline-primary">View</a>
                     </li>

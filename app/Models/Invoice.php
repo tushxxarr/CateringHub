@@ -21,4 +21,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function merchant()
+    {
+        return $this->belongsTo(MerchantProfile::class, 'merchant_id');
+    }
 }

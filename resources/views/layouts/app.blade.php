@@ -73,7 +73,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('customer.cart.index') }}">
                                     <i class="fas fa-shopping-cart"></i> Cart
-                                    <span class="badge bg-danger cart-count">0</span>
+                                    <span class="badge bg-warning cart-count">{{ $cartCount ?? 0 }}</span>
                                 </a>
                             </li>
                         @endif

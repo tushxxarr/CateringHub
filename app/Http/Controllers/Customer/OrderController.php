@@ -18,12 +18,51 @@ class OrderController extends Controller
     public function index()
     {
         $customer = Auth::user()->customerProfile;
+
+        // Get all orders
         $orders = Order::where('customer_id', $customer->id)
             ->with('merchant')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('customer.orders.index', compact('orders'));
+        // Get orders by status
+        $pendingOrders = Order::where('customer_id', $customer->id)
+            ->where('status', 'pending')
+            ->with('merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $processingOrders = Order::where('customer_id', $customer->id)
+            ->where('status', 'processing')
+            ->with('merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $completedOrders = Order::where('customer_id', $customer->id)
+            ->where('status', 'completed')
+            ->with('merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $cancelledOrders = Order::where('customer_id', $customer->id)
+            ->where('status', 'cancelled')
+            ->with('merchant')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Count for badges
+        $pendingCount = $pendingOrders->total();
+        $processingCount = $processingOrders->total();
+
+        return view('customer.orders.index', compact(
+            'orders',
+            'pendingOrders',
+            'processingOrders',
+            'completedOrders',
+            'cancelledOrders',
+            'pendingCount',
+            'processingCount'
+        ));
     }
 
     public function show(Order $order)
@@ -36,127 +75,107 @@ class OrderController extends Controller
 
     public function create()
     {
+        // Get cart items
         $cart = Session::get('cart', []);
-
-        if (empty($cart)) {
-            return redirect()->route('customer.cart.index')->with('error', 'Your cart is empty.');
-        }
-
-        $customer = Auth::user()->customerProfile;
         $cartItems = [];
         $total = 0;
-        $merchantId = null;
-        $deliveryDate = null;
 
-        $foodItemIds = array_keys($cart);
-        $foodItems = FoodItem::whereIn('id', $foodItemIds)->get()->keyBy('id');
+        if (!empty($cart)) {
+            $foodItemIds = array_keys($cart);
+            $foodItems = FoodItem::whereIn('id', $foodItemIds)->get()->keyBy('id');
 
-        foreach ($cart as $id => $item) {
-            if (isset($foodItems[$id])) {
-                $foodItem = $foodItems[$id];
-                $subtotal = $foodItem->price * $item['quantity'];
-                $total += $subtotal;
+            foreach ($cart as $id => $item) {
+                if (isset($foodItems[$id])) {
+                    $foodItem = $foodItems[$id];
+                    $subtotal = $foodItem->price * $item['quantity'];
+                    $total += $subtotal;
 
-                $cartItems[] = [
-                    'id' => $id,
-                    'food_item' => $foodItem,
-                    'quantity' => $item['quantity'],
-                    'subtotal' => $subtotal,
-                ];
-
-                // Set merchant ID from the first item
-                if (!$merchantId) {
-                    $merchantId = $foodItem->merchant_id;
-                }
-
-                // Set delivery date from the first item
-                if (!$deliveryDate) {
-                    $deliveryDate = $item['delivery_date'];
+                    $cartItems[] = [
+                        'id' => $id,
+                        'food_item' => $foodItem,
+                        'quantity' => $item['quantity'],
+                        'subtotal' => $subtotal,
+                        'merchant_id' => $foodItem->merchant_id,
+                    ];
                 }
             }
         }
 
-        return view('customer.orders.create', compact('cartItems', 'total', 'customer', 'merchantId', 'deliveryDate'));
+        // Pass the cart data to the view
+        return view('customer.orders.create', compact('cartItems', 'total'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'merchant_id' => 'required|exists:merchant_profiles,id',
+            'merchant_id' => 'required|exists:merchant_profiles,id', // Updated here
+            'food_items' => 'required|array',
+            'food_items.*.id' => 'required|exists:food_items,id',
+            'food_items.*.quantity' => 'required|integer|min:1',
             'delivery_date' => 'required|date|after_or_equal:today',
             'delivery_time' => 'required',
-            'delivery_address' => 'required|string',
-            'notes' => 'nullable|string',
+            'delivery_address' => 'required|string|max:255',
         ]);
 
-        $cart = Session::get('cart', []);
-
-        if (empty($cart)) {
-            return redirect()->route('customer.cart.index')->with('error', 'Your cart is empty.');
-        }
-
-        $customer = Auth::user()->customerProfile;
-        $total = 0;
-
-        $foodItemIds = array_keys($cart);
-        $foodItems = FoodItem::whereIn('id', $foodItemIds)->get()->keyBy('id');
-
-        foreach ($cart as $id => $item) {
-            if (isset($foodItems[$id])) {
-                $foodItem = $foodItems[$id];
-                $subtotal = $foodItem->price * $item['quantity'];
-                $total += $subtotal;
-            }
-        }
-
-        DB::beginTransaction();
-
         try {
-            // Create order
+            DB::beginTransaction();
+
+            // Create the order
             $order = new Order();
-            $order->customer_id = $customer->id;
+            $order->customer_id = Auth::user()->customerProfile->id;
             $order->merchant_id = $request->merchant_id;
-            $order->order_number = 'ORD-' . strtoupper(Str::random(10));
-            $order->total_amount = $total;
-            $order->status = 'pending';
+            $order->order_number = 'ORD-' . strtoupper(Str::random(8));
             $order->delivery_date = $request->delivery_date;
             $order->delivery_time = $request->delivery_time;
             $order->delivery_address = $request->delivery_address;
             $order->notes = $request->notes;
+            $order->status = 'pending';
+
+            // Calculate totals
+            $subtotal = 0;
+            foreach ($request->food_items as $item) {
+                $foodItem = FoodItem::findOrFail($item['id']);
+                $subtotal += $foodItem->price * $item['quantity'];
+            }
+
+            $order->subtotal = $subtotal;
+            $order->delivery_fee = 10000; // Fixed delivery fee
+            $order->total_amount = $subtotal + $order->delivery_fee;
             $order->save();
 
             // Create order items
-            foreach ($cart as $id => $item) {
-                if (isset($foodItems[$id])) {
-                    $foodItem = $foodItems[$id];
+            foreach ($request->food_items as $item) {
+                $foodItem = FoodItem::findOrFail($item['id']);
 
-                    $orderItem = new OrderItem();
-                    $orderItem->order_id = $order->id;
-                    $orderItem->food_item_id = $foodItem->id;
-                    $orderItem->quantity = $item['quantity'];
-                    $orderItem->price = $foodItem->price;
-                    $orderItem->save();
-                }
+                $orderItem = new OrderItem();
+                $orderItem->order_id = $order->id;
+                $orderItem->food_item_id = $item['id'];
+                $orderItem->quantity = $item['quantity'];
+                $orderItem->price = $foodItem->price;
+                $orderItem->subtotal = $foodItem->price * $item['quantity'];
+                $orderItem->save();
             }
 
-            // Create invoice
+            // Create invoice automatically
             $invoice = new Invoice();
             $invoice->order_id = $order->id;
-            $invoice->invoice_number = 'INV-' . strtoupper(Str::random(10));
-            $invoice->amount = $total;
+            $invoice->merchant_id = $order->merchant_id;
+            $invoice->invoice_number = 'INV-' . strtoupper(Str::random(8));
+            $invoice->amount = $order->total_amount;
             $invoice->status = 'pending';
-            $invoice->due_date = now()->addDays(7);
+            $invoice->due_date = now()->addDays(3); // Set due date to 3 days from now
             $invoice->save();
+
+            // Clear the cart after successful order
+            Session::forget('cart');
 
             DB::commit();
 
-            // Clear cart
-            Session::forget('cart');
-
-            return redirect()->route('customer.orders.show', $order)->with('success', 'Order placed successfully.');
+            return redirect()->route('customer.orders.show', $order->id)
+                ->with('success', 'Order placed successfully! Your order number is #' . $order->order_number);
         } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Failed to place order. Error: ' . $e->getMessage());
         }
     }
 
