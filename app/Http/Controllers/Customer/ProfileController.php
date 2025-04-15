@@ -35,7 +35,6 @@ class ProfileController extends Controller
         $recentOrders = Order::where('customer_id', $customerId)
             ->with('merchant')
             ->latest()
-            ->take(5)
             ->get();
 
         $recentActivities = [];
