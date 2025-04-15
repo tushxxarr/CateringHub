@@ -4,7 +4,7 @@ A web-based Catering Marketplace that connects catering businesses with customer
 
 ## Application Overview
 
-### Guest Page
+#### Guest Page
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Homepage.png" style="width: 48%; height: auto;">
@@ -17,9 +17,8 @@ A web-based Catering Marketplace that connects catering businesses with customer
 </div>
 <br>
 
-### Merchant Page
+#### Merchant Page
 
-<br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantDashboard.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerhantProfile.png" style="width: 48%; height: auto;">
@@ -41,9 +40,8 @@ A web-based Catering Marketplace that connects catering businesses with customer
 </div>
 <br>
 
-### Customer Page
+#### Customer Page
 
-<br>
 <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerDashboard.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerProfile.png" style="width: 48%; height: auto;">
