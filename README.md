@@ -18,6 +18,31 @@ A web-based Catering Marketplace that connects catering businesses with customer
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/DashboardFoodItems.png" style="width: 48%; height: auto;">
   <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/AddFoodItem.png" style="width: 48%; height: auto;">
 </div>
+<br>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerRegister.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerDashboard.png" style="width: 48%; height: auto;">
+</div>
+<br>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantList.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/MerchantMenu.png" style="width: 48%; height: auto;">
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Cart.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Order.png" style="width: 48%; height: auto;">
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/OrderDetail.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/Invoice.png" style="width: 48%; height: auto;">
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/OrderHistory.png" style="width: 48%; height: auto;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/InvoiceHistory.png" style="width: 48%; height: auto;">
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+  <img src="https://github.com/muhammadaliyusuf/CateringHub/blob/main/.ApplicationOverview/CustomerProfile.png" style="width: 48%; height: auto;">
+</div>
 
 ## Features
 
