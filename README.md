@@ -1,6 +1,6 @@
 # CateringHub
 
-A responsive web-based Catering Marketplace using Laravel, enabling corporate customers to order meals from catering vendors. The system includes vendor and customer portals with features such as registration, profile and menu management, order tracking, invoicing, and search filters based on location and food type.
+A web-based Catering Marketplace using Laravel, designed to connect catering service providers (merchants) with office clients. It features separate portals for merchants and customers, enabling profile and menu management, order placement, and invoicing through a responsive and secure interface.
 
 ## Application Overview
 
